@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday - Romantic Light</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Toàn bộ trang - Phong cách Lãng mạn, Sang trọng */
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #2c0303 0%, #0a0000 100%);
+            color: #f7e7ce; /* Màu vàng champagne */
+            font-family: 'Playfair Display', serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Canvas của Three.js làm nền phía sau */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none; /* Để có thể tương tác với các nút phía trên nếu có */
+        }
+
+        /* Khung chứa nội dung nổi lên trên */
+        .container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 60px 20px;
+            z-index: 10;
+        }
+
+        /* Tên tiêu đề mềm mại lãng mạn */
+        h1 {
+            font-family: 'Alex Brush', cursive;
+            font-size: 5.5rem;
+            color: #d4af37; /* Vàng cổ điển */
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4), 2px 2px 4px rgba(0,0,0,0.8);
+            margin: 0 0 10px 0;
+        }
+
+        .subtitle {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #ff4d6d; /* Đỏ hoa hồng */
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            text-shadow: 0 0 10px rgba(255, 77, 109, 0.3);
+        }
+
+        /* Khu vực trưng bày ảnh nghệ thuật */
+        .photo-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-bottom: 350px; /* Nhường chỗ cho chiếc bánh Three.js ở khoảng giữa/dưới */
+        }
+
+        /* Khung ảnh phong cách lãng mạn cổ điển */
+        .photo-frame {
+            background: #fffdf9;
+            padding: 15px 15px 45px 15px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0,0,0,0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transform: rotate(-4deg);
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+        }
+
+        .photo-frame:nth-child(2) {
+            transform: rotate(5deg) translateY(20px);
+        }
+
+        /* Hiệu ứng rạng rỡ khi di chuột vào ảnh */
+        .photo-frame:hover {
+            transform: rotate(0deg) scale(1.05) translateY(-10px);
+            box-shadow: 0 30px 60px rgba(255, 77, 109, 0.2);
+            z-index: 20;
+        }
+
+        .photo-frame img {
+            width: 250px;
+            height: 320px;
+            object-fit: cover;
+            filter: sepia(0.15) contrast(1.05);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        /* Chú thích viết tay dưới ảnh */
+        .photo-caption {
+            font-family: 'Alex Brush', cursive;
+            font-size: 2rem;
+            color: #000000;
+            margin-top: 15px;
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Khung lời chúc lãng mạn tinh tế */
+        .wishes {
+            background: rgba(18, 1, 1, 0.65);
+            backdrop-filter: blur(10px); /* Hiệu ứng kính mờ hiện đại */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            line-height: 2;
+            font-size: 1.25rem;
+            max-width: 650px;
+            margin: 40px auto 0 auto;
+            border-top: 3px solid #d4af37;
+            border-bottom: 3px solid #ff4d6d;
+        }
+
+        .wishes p:first-child {
+            font-size: 1.6rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div class="container">
+        <h1>TN </h1>
+        <div class="subtitle">Alles Gut zum Geburtstag </div>
+
+        <div class="photo-gallery">
+            <div class="photo-frame">
+                <img src="n1.jpg" alt="Ảnh lãng mạn 1">
+                <div class="photo-caption">2026</div>
+            </div>
+            <div class="photo-frame">
+                <img src="n2.jpg" alt="Ảnh lãng mạn 2">
+                <div class="photo-caption">Glück </div>
+            </div>
+        </div>
+
+        <div class="wishes">
+            <p>Zu meine Liebe,</p>
+            <p>23/06/2026 Ein erfolgreiches Jahr , Ein glückliches Jahr , Ein sinnvolles Jahre . Sie sind die Wünschen von mir , die ich hoffe , dass du in deinem neuen Lebensjahr bekommen könntest. </p>
+        </div>
+    </div>
+
+    <script>
+        // 1. Khởi tạo Scene, Camera, Renderer
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 2, 12);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+
+        // 2. Ánh sáng (Làm nổi bật chất liệu lãng mạn)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+
+        const targetLight = new THREE.PointLight(0xff9999, 1.5, 30); // Ánh sáng hồng lãng mạn
+        targetLight.position.set(5, 5, 5);
+        scene.add(targetLight);
+
+        const candleLight = new THREE.PointLight(0xffaa44, 2, 10); // Ánh nến ấm áp
+        candleLight.position.set(0, 1.8, 0);
+        scene.add(candleLight);
+
+        // 3. Tạo Nhóm chứa Bánh Kem để dễ quản lý vị trí
+        const cakeGroup = new THREE.Group();
+
+        // Chất liệu kem cổ điển & lãng mạn (Phong cách Velvet)
+        const matRedVelvet = new THREE.MeshStandardMaterial({ color: 0x800020, roughness: 0.4, metalness: 0.1 }); // Đỏ rượu
+        const matGoldCream = new THREE.MeshStandardMaterial({ color: 0xe5c158, roughness: 0.3, metalness: 0.2 }); // Vàng kem cổ điển
+        const matCandle = new THREE.MeshStandardMaterial({ color: 0xff4d6d, roughness: 0.5 }); // Thân nến hồng
+        const matFlame = new THREE.MeshBasicMaterial({ color: 0xffaa00 }); // Ngọn lửa sáng rực
+
+        // Tầng bánh dưới (Đỏ Nhung)
+        const bottomGeom = new THREE.CylinderGeometry(2, 2, 1.2, 32);
+        const bottomLayer = new THREE.Mesh(bottomGeom, matRedVelvet);
+        bottomLayer.position.y = -0.6;
+        cakeGroup.add(bottomLayer);
+
+        // Tầng kem phủ ở giữa (Vàng Cổ Điển)
+        const creamGeom = new THREE.CylinderGeometry(2.05, 2.05, 0.15, 32);
+        const creamLayer = new THREE.Mesh(creamGeom, matGoldCream);
+        creamLayer.position.y = -0.05;
+        cakeGroup.add(creamLayer);
+
+        // Tầng bánh trên (Đỏ Nhung nhỏ hơn)
+        const topGeom = new THREE.CylinderGeometry(1.4, 1.4, 1, 32);
+        const topLayer = new THREE.Mesh(topGeom, matRedVelvet);
+        topLayer.position.y = 0.5;
+        cakeGroup.add(topLayer);
+
+        // Kem phủ trên cùng (Vàng Cổ Điển)
+        const topCreamGeom = new THREE.CylinderGeometry(1.42, 1.42, 0.1, 32);
+        const topCreamLayer = new THREE.Mesh(topCreamGeom, matGoldCream);
+        topCreamLayer.position.y = 1;
+        cakeGroup.add(topCreamLayer);
+
+        // Ngọn nến
+        const candleGeom = new THREE.CylinderGeometry(0.08, 0.08, 0.6, 16);
+        const candle = new THREE.Mesh(candleGeom, matCandle);
+        candle.position.set(0, 1.3, 0);
+        cakeGroup.add(candle);
+
+        // Ngọn lửa 3D hình giọt nước nhỏ
+        const flameGeom = new THREE.ConeGeometry(0.1, 0.25, 16);
+        const flame = new THREE.Mesh(flameGeom, matFlame);
+        flame.position.set(0, 1.7, 0);
+        cakeGroup.add(flame);
+
+        // Điều chỉnh vị trí của toàn bộ chiếc bánh trên màn hình web
+        cakeGroup.position.set(0, -1.8, 0); 
+        scene.add(cakeGroup);
+
+
+        // 4. Hệ thống hạt: Cánh hoa hồng rơi lãng mạn (Rose Petals Particles)
+        const petalCount = 80;
+        const petalGeometry = new THREE.BoxGeometry(0.15, 0.02, 0.15);
+        const petalMaterial = new THREE.MeshStandardMaterial({ color: 0xb7091e, roughness: 0.6 }); // Màu cánh hoa hồng đỏ
+        const petals = [];
+
+        for (let i = 0; i < petalCount; i++) {
+            const petal = new THREE.Mesh(petalGeometry, petalMaterial);
+            petal.position.set(
+                (Math.random() - 0.5) * 15,
+                Math.random() * 15,
+                (Math.random() - 0.5) * 15
+            );
+            petal.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+            scene.add(petal);
+            petals.push(petal);
+        }
+
+
+        // 5. Vòng lặp Animation tạo chuyển động hoạt hình
+        let clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsedTime = clock.getElapsedTime();
+
+            // Xoay chiếc bánh 3D nhẹ nhàng lãng mạn
+            cakeGroup.rotation.y = elapsedTime * 0.4;
+            
+            // Hiệu ứng ngọn lửa nến lập lòe tự nhiên
+            flame.scale.y = 1 + Math.sin(elapsedTime * 20) * 0.15;
+            flame.scale.x = 1 + Math.cos(elapsedTime * 25) * 0.1;
+            candleLight.intensity = 1.5 + Math.sin(elapsedTime * 15) * 0.3;
+
+            // Di chuyển các cánh hoa hồng rơi xuống
+            petals.forEach(petal => {
+                petal.position.y -= 0.03; // Tốc độ rơi chậm lãng mạn
+                petal.rotation.x += 0.01;
+                petal.rotation.y += 0.02;
+
+                // Nếu cánh hoa rơi xuống quá đáy, đưa nó trở lại đỉnh
+                if (petal.position.y < -6) {
+                    petal.position.y = 10;
+                    petal.position.x = (Math.random() - 0.5) * 15;
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // 6. Xử lý phản hồi khi thay đổi kích thước cửa sổ trình duyệt
+        window.addEventListener('resize', onWindowResize, false);
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+    </script>
+</body>
+</html>
